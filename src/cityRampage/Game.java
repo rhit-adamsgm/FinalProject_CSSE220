@@ -24,6 +24,7 @@ public class Game {
 	private static void onStartScreenClose() {
 		username = startScreen.getReturnedUsername();
 		System.out.println(username);//test code here
+		
 	}
 
 }

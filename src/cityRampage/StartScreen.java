@@ -11,13 +11,13 @@ import java.awt.BorderLayout;
 
 
 public class StartScreen extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private final JPanel textPanel;
 	private final JLabel label;
 	private final JTextField input;
 	private final JPanel buttonPanel;
 	private final JButton startButton;
 	private String returnedUsername = "";
-	private boolean gameReady = false;
 	private Runnable onCloseCallback;
 	
 	public StartScreen(Runnable onCloseCallback) {
@@ -42,25 +42,30 @@ public class StartScreen extends JFrame {
 		add(textPanel, BorderLayout.NORTH);
 		add(buttonPanel, BorderLayout.SOUTH);
 		
+		//visuals of the frame
 		setSize(600, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 	}
-
+	
+	/**
+	 * This method is what happens when the startGame JButton is pressed.
+	 * <br>It saves the entered username, closes the screen, and runs the
+	 * <br>given onCloseCallback method that the owner class gave.
+	 */
 	private void startGame() {
 		if (!input.getText().trim().equals("")) {
 			returnedUsername = input.getText().trim();
-			gameReady = true;
 			dispose();
 			onCloseCallback.run();
 		}
 	}
 	
-	public boolean getGameReady() {
-		return gameReady;
-	}
-	
+	/**
+	 * This method is a getter for the entered username in this screen
+	 * @return returnedUsername - the entered username
+	 */
 	public String getReturnedUsername() {
 		return returnedUsername;
 	}
