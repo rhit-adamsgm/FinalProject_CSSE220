@@ -66,6 +66,9 @@ public class Link {
 	
 	public void sett(double givent) {
 		t = givent;
+		//debug-------------------//
+		System.out.println(givent);
+		//------------------------//
 	}
 	
 	//DRAW-------------------------------------------------------------//
@@ -112,7 +115,7 @@ public class Link {
 		double minY = getVertY(0);
 		double maxX = getVertX(0);
 		double maxY = getVertY(0);
-		for (int i = 1;i < pins[0].length;i++) {
+		for (int i = 1;i < vertices[0].length;i++) {
 			if (getVertX(i) < minX) {
 				minX = getVertX(i);
 			}
@@ -126,6 +129,15 @@ public class Link {
 				maxY = getVertY(i);
 			}
 		}
+		
+		//debugging---------------//
+		System.out.println(maxX-minX);
+		System.out.println("MaxX: " + maxY);
+		System.out.println("MinY: " + minY);
+		System.out.println("MaxY: " + maxY);
+		System.out.println("");
+		System.out.println("VertX 3 " + getVertX(3));
+		//------------------------//
 		return new double[] {Math.round(maxX-minX), Math.round(maxY-minY), minX, minY};
 	}
 	
