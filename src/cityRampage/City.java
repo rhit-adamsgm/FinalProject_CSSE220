@@ -7,7 +7,7 @@ public class City {
 	int x;
 	int y;
 	double scale;
-	List<City> cityMarkers = new ArrayList<>();
+	ArrayList<Integer> cityMarkers = new ArrayList<>();
 	
 	
 	public City(int x, int y, double scale) {

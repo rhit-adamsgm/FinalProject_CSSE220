@@ -18,8 +18,8 @@ public class MapPanel extends JPanel {
 	BufferedImage normalCity;
 	BufferedImage damagedCity;
 	BufferedImage usMap;
-	List<City> cityMarkers = new ArrayList<>();
 
+	
 	
 	
 	public MapPanel() {
@@ -51,8 +51,6 @@ public class MapPanel extends JPanel {
 			e.printStackTrace();
 			usMap = null;
 		}
-		
-		cityMarkers.add(new City())
 	}
 	
 	@Override
