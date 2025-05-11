@@ -8,7 +8,7 @@ import javax.swing.SwingUtilities;
 
 public class Viewer {
 	
-	public static void main(String args[]) {
+	public Viewer() {
 		SwingUtilities.invokeLater(()-> createGUI());
 	}
 	
