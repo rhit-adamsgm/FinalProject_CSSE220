@@ -1,6 +1,7 @@
 package cityRampage;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import java.lang.Math;
@@ -8,10 +9,12 @@ import java.lang.Math;
 public class Link {
 	//fields-----------------------------------//
 	private double[][] vertices, pins;
-	private double[] r;
+	private double[] r = new double[2];
 	private double t;
 	private java.awt.image.BufferedImage image;
 	private Graphics2D g2;
+	private int sizeX;
+	private int sizeY;
 	//-----------------------------------------//
 	
 	public Link(double[][] givenVertices, double[][] givenPins, BufferedImage givenImage, Graphics2D giveng2) {
@@ -19,16 +22,16 @@ public class Link {
 		vertices = givenVertices;
 		pins = givenPins;
 		//save the graphics package
-		g2 =giveng2;
-		//scale the image to the size it should be PER the given vertice info
+		g2 = giveng2;
+		//image scaling data and saving image
 		double[] imageSize = calcSize();
-		image = new BufferedImage((int)imageSize[0],(int)imageSize[1],givenImage.getType()); //take a 2nd look at the image stuff later
-		
+		sizeX = (int)imageSize[0];
+		sizeY = (int)imageSize[1];
+		image = givenImage;
 		//set r and t
 		t = 0;
-		r = new double[2];
-		r[0] = imageSize[2] + imageSize[0]/2; //calculate the middle of the image in local coordinates
-		r[1] = imageSize[3] + imageSize[1]/2;
+		r[0] = imageSize[2] + sizeX/2; //calculate the middle of the image as the coordinates
+		r[1] = imageSize[3] + sizeY/2;
 	}
 	
 	//GETTERS----------------------------------------------------------//
@@ -67,7 +70,15 @@ public class Link {
 	
 	//DRAW-------------------------------------------------------------//
 	public void draw() {
+		AffineTransform oldTransform = g2.getTransform();  // Save current transform
 		
+		g2.translate(r[0], r[1]); // Translate to the desired center of the image
+		
+		g2.rotate(t); // Rotate the image to the desired angle
+		
+		g2.drawImage(image, -sizeX/2, -sizeY/2, sizeX, sizeY, null); // Draw the image starting at the top left corner of the bounding box, with desired size
+		
+		g2.setTransform(oldTransform); // Restore transform
 	}
 	
 	//CALCULATION GETTERS----------------------------------------------//
@@ -116,11 +127,6 @@ public class Link {
 			}
 		}
 		return new double[] {Math.round(maxX-minX), Math.round(maxY-minY), minX, minY};
-	}
-	
-	//CALCULATION SETTERS----------------------------------------------//
-	public void setOrgFromPin(double[][] inputPin) {
-		
 	}
 	
 	
