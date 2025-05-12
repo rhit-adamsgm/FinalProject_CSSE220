@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,8 +31,6 @@ public class CodeTestClass {
 		DrawingPanel drawingPanel = new DrawingPanel(image);
 		frame.add(drawingPanel);
 		
-		
-		
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -41,17 +40,31 @@ public class CodeTestClass {
 class DrawingPanel extends JPanel {
 	
 	private BufferedImage image;
+	private Timer baseUnitTimer;
+	private MechBot odob;
+	private Graphics2D g2;
+	
 	public DrawingPanel(BufferedImage image) {
 		super();
 		this.image = image;
+		odob = new MechBot(500, 375, 1);
+		
+		int baseDelay = 64; //64 milliseconds will be the base frame rate of our game
+		baseUnitTimer = new Timer(baseDelay, e -> handleBaseFrame(odob));
+		baseUnitTimer.start();
 	}
 	
 	@Override
 	protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
-	    Graphics2D g2 = (Graphics2D) g;
+	    g2 = (Graphics2D) g;
+	    odob.draw(g2);
 	    
 	    
+	    
+	    
+	    
+	    /**
 	    //Make the test link--------------------------//
 	    double[][] verts1 = new double[][] { {0, 0, 140, 140},
 	    									 {0, 30, 30, 0} };
@@ -68,5 +81,12 @@ class DrawingPanel extends JPanel {
 	    	testLink.sett(i*Math.PI/12);
 	    	testLink.draw();
 	    }
+	    */
+	}
+	
+	private void handleBaseFrame(MechBot odob) {
+		odob.walk();
+		repaint();
+		
 	}
 }
