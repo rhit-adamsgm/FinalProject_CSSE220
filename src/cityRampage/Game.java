@@ -6,6 +6,8 @@ public class Game {
 	private String username;
 	private StartScreen startScreen;
 	private Viewer viewer;
+	private Model model;
+	private Controller controller;
 	//----------------------------------------------//
 
 	public static void main(String[] args) {

@@ -110,6 +110,8 @@ public class MapPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if (selectedCity != null) {
 					System.out.println("Conquering " + selectedCity.getname() + "!");
+					
+					new CityView(selectedCity);
 
 				// Get the parent frame and dispose it
 					JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MapPanel.this);
