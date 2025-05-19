@@ -95,9 +95,14 @@ public class MechBot extends Linkage {
 	}
 	
 	public void walk() {
+		System.out.println("walk called: " + loopSpot);
 		if (loopSpot > 100) loopSpot = 0;
-		torso.setX(homeX + 10*Math.sin((loopSpot/100)*Math.PI*2)); //small, slow cycles
-		legF1.sett((Math.PI/4)*Math.sin(loopSpot/100*Math.PI));
+		//10*Math.sin((loopSpot/100)*Math.PI*2)
+		torso.setX(homeX + 5*loopSpot); //small, slow cycles
+		//(Math.PI/4)*Math.sin(loopSpot/100*Math.PI)
+		legF1.sett(loopSpot/2);
+		System.out.println("leg t: " + legF1.gett());
+		System.out.println("torso x: " + torso.getr()[0]);
 		
 		enforceConstaintsInOrder();
 		loopSpot++;

@@ -21,6 +21,7 @@ public abstract class Linkage {
 		for (int i = 0;i < constraints.size();i++) {
 			constraints.get(i).enactConstraint();
 		}
+		System.out.println("enforce constraints called");//---------TEST CODE
 	}
 	
 	public void draw(Graphics2D g2) {

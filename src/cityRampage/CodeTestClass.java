@@ -47,7 +47,7 @@ class DrawingPanel extends JPanel {
 	public DrawingPanel(BufferedImage image) {
 		super();
 		this.image = image;
-		odob = new MechBot(500, 375, 1);
+		odob = new MechBot(500, 375, 4);
 		
 		int baseDelay = 64; //64 milliseconds will be the base frame rate of our game
 		baseUnitTimer = new Timer(baseDelay, e -> handleBaseFrame(odob));

@@ -18,9 +18,16 @@ public class Link {
 	//-----------------------------------------//
 	
 	public Link(double[][] givenVertices, double[][] givenPins, BufferedImage givenImage) {
-		//take in the local vertice and pin info, save that raw
-		vertices = givenVertices;
-		pins = givenPins;
+		//take in the local vertice and pin info, copied
+		int vertn = givenVertices[0].length;
+		vertices = new double[2][vertn];
+		System.arraycopy(givenVertices[0], 0, vertices[0], 0, vertn);
+		System.arraycopy(givenVertices[1], 0, vertices[1], 0, vertn);
+		//take in the local pin info, copied
+		int pinn = givenPins[0].length;
+		pins = new double[2][pinn];
+		System.arraycopy(givenPins[0], 0, vertices[0], 0, pinn);
+		System.arraycopy(givenPins[1], 0, vertices[1], 0, pinn);
 		//image scaling data and saving image
 		double[] imageSize = calcSize();
 		sizeX = (int)imageSize[0];
@@ -33,9 +40,16 @@ public class Link {
 	}
 	
 	public Link(double[][] givenVertices, double[][] givenPins, BufferedImage givenImage, double scaleFactor) {
-		//take in the local vertice and pin info, save that raw
-		vertices = givenVertices;
-		pins = givenPins;
+		//take in the local vertice info, copied
+		int vertn = givenVertices[0].length;
+		vertices = new double[2][vertn];
+		System.arraycopy(givenVertices[0], 0, vertices[0], 0, vertn);
+		System.arraycopy(givenVertices[1], 0, vertices[1], 0, vertn);
+		//take in the local pin info, copied
+		int pinn = givenPins[0].length;
+		pins = new double[2][pinn];
+		System.arraycopy(givenPins[0], 0, vertices[0], 0, pinn);
+		System.arraycopy(givenPins[1], 0, vertices[1], 0, pinn);
 		//scale the link to what we want it
 		this.scaleFactor = scaleFactor;
 		scaleSize(this.scaleFactor);
@@ -153,19 +167,17 @@ public class Link {
 		return new double[] {Math.round(maxX-minX), Math.round(maxY-minY), minX, minY};
 	}
 	
-	
 	//OTHER----------------------------------------------//
-	public void scaleSize(double scaleFactor) {
-		for (int i = 1;i < vertices[0].length;i++) {
-			vertices[0][i] =  vertices[0][i]*scaleFactor;
-			vertices[1][i] =  vertices[1][i]*scaleFactor;
+		public void scaleSize(double scaleFactor) {
+			for (int i = 1;i < vertices[0].length;i++) {
+				vertices[0][i] =  vertices[0][i]*scaleFactor;
+				vertices[1][i] =  vertices[1][i]*scaleFactor;
+			}
+			for (int i = 1;i < pins[0].length;i++) {
+				pins[0][i] =  pins[0][i]*scaleFactor;
+				pins[1][i] =  pins[1][i]*scaleFactor;
+			}
 		}
-		for (int i = 1;i < pins[0].length;i++) {
-			pins[0][i] =  pins[0][i]*scaleFactor;
-			pins[1][i] =  pins[1][i]*scaleFactor;
-		}
-		System.out.println("scaled link: " + scaleFactor);
-	}
 	
 	
 	
