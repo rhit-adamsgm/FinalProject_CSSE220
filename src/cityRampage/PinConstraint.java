@@ -12,15 +12,18 @@ public class PinConstraint extends Constraint {
 
 	@Override
 	public void enactConstraint() {
+		System.out.println("ECC=======================");
+		
 		double[][] pinPos = Link1.getPinLoc(pin1-1); //this is where the pins should be based on Link1
-		System.out.println(pinPos[0][0] + " " + pinPos[1][0]);
+		System.out.println("x pos of pin1: " + pinPos[0][0]);
 		double[][] org2PinLink2 = Link2.getOrg2Pin(pin2-1);
+		System.out.println("x vec from pin2 to org2: " + (-org2PinLink2[0][0]));
 		double x2 = pinPos[0][0] - org2PinLink2[0][0]; //x position of Link 2
 		double y2 = pinPos[1][0] - org2PinLink2[1][0]; //y position of Link 2
 		Link2.setr(new double[] {x2,y2});
-		System.out.println("enact constraint called");
-		System.out.println("SHOULD BE: " + x2 + " " + y2);
-		System.out.println("       IS: " + Link2.getr()[0] + " " + Link2.getr()[1]);
+		System.out.println("Setting Link2 r to: " + x2 + " " + y2);
+		System.out.println("==================");
+
 	}
 
 }

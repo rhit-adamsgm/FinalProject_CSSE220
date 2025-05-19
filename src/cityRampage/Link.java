@@ -1,5 +1,6 @@
 package cityRampage;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -12,13 +13,12 @@ public class Link {
 	private double[] r = new double[2];
 	private double t;
 	private java.awt.image.BufferedImage image;
-	private int sizeX;
-	private int sizeY;
+	private int sizeX, sizeY, gapX, gapY; //'gap' is the gap in between the (0,0) origin and the top left corner of the image
 	private double scaleFactor;
 	//-----------------------------------------//
 	
 	public Link(double[][] givenVertices, double[][] givenPins, BufferedImage givenImage) {
-		//take in the local vertice and pin info, copied
+		//take in the local vertice info, copied
 		int vertn = givenVertices[0].length;
 		vertices = new double[2][vertn];
 		System.arraycopy(givenVertices[0], 0, vertices[0], 0, vertn);
@@ -26,17 +26,18 @@ public class Link {
 		//take in the local pin info, copied
 		int pinn = givenPins[0].length;
 		pins = new double[2][pinn];
-		System.arraycopy(givenPins[0], 0, vertices[0], 0, pinn);
-		System.arraycopy(givenPins[1], 0, vertices[1], 0, pinn);
+		System.arraycopy(givenPins[0], 0, pins[0], 0, pinn);
+		System.arraycopy(givenPins[1], 0, pins[1], 0, pinn);
 		//image scaling data and saving image
-		double[] imageSize = calcSize();
-		sizeX = (int)imageSize[0];
-		sizeY = (int)imageSize[1];
+		calcSize();
 		image = givenImage;
 		//set r and t
 		t = 0;
-		r[0] = imageSize[2] + sizeX/2; //calculate the middle of the image as the coordinates
-		r[1] = imageSize[3] + sizeY/2;
+		r[0] = 0;
+		r[1] = 0;
+		//OLD
+		//r[0] = imageSize[2] + sizeX/2; //calculate the middle of the image as the coordinates
+		//r[1] = imageSize[3] + sizeY/2;
 	}
 	
 	public Link(double[][] givenVertices, double[][] givenPins, BufferedImage givenImage, double scaleFactor) {
@@ -48,20 +49,23 @@ public class Link {
 		//take in the local pin info, copied
 		int pinn = givenPins[0].length;
 		pins = new double[2][pinn];
-		System.arraycopy(givenPins[0], 0, vertices[0], 0, pinn);
-		System.arraycopy(givenPins[1], 0, vertices[1], 0, pinn);
-		//scale the link to what we want it
+		System.arraycopy(givenPins[0], 0, pins[0], 0, pinn);
+		System.arraycopy(givenPins[1], 0, pins[1], 0, pinn);
+		//scale the link to what we want it---------------------------------//
 		this.scaleFactor = scaleFactor;
 		scaleSize(this.scaleFactor);
+		//-----------------------------------------------------------------//
 		//image scaling data and saving image
-		double[] imageSize = calcSize();
-		sizeX = (int)imageSize[0];
-		sizeY = (int)imageSize[1];
+		calcSize();
 		image = givenImage;
 		//set r and t
 		t = 0;
-		r[0] = imageSize[2] + sizeX/2; //calculate the middle of the image as the coordinates
-		r[1] = imageSize[3] + sizeY/2;
+		r[0] = 0;
+		r[1] = 0;
+		//------------QUESTION THIS HARD---------------------------------------------------------//
+		//OLD
+		//r[0] = imageSize[2] + sizeX/2; //calculate the middle of the image as the coordinates
+		//r[1] = imageSize[3] + sizeY/2;
 	}
 	
 	//GETTERS----------------------------------------------------------//
@@ -114,7 +118,28 @@ public class Link {
 		
 		g2.rotate(t); // Rotate the image to the desired angle
 		
-		g2.drawImage(image, -sizeX/2, -sizeY/2, sizeX, sizeY, null); // Draw the image starting at the top left corner of the bounding box, with desired size
+		g2.drawImage(image, gapX, gapY, sizeX, sizeY, null); // Draw the image starting at the top left corner of the bounding box, with desired size
+		
+		//g2.drawImage(image, -sizeX/2, -sizeY/2, sizeX, sizeY, null);
+		//DEBUG______________________________//
+		if (pins[0].length == 1) {
+			g2.setColor(Color.RED);
+			g2.drawOval((int)(getPinX(0)-2.5), (int)(getPinY(0)-2.5), 5, 5);
+		}
+		if (pins[0].length == 2) {
+			g2.setColor(Color.BLUE);
+			g2.drawOval((int)getPinX(0)-5, (int)getPinY(0)-5, 10, 10);
+			g2.fillOval((int)getPinX(1)-5, (int)getPinY(1)-5, 10, 10);
+		}
+		if (pins[0].length == 3) {
+			g2.setColor(Color.GREEN);
+			g2.drawOval((int)getPinX(0)-5, (int)getPinY(0)-5, 10, 10);
+			g2.drawOval((int)getPinX(1)-5, (int)getPinY(1)-5, 10, 10);
+			g2.drawOval((int)getPinX(2)-5, (int)getPinY(2)-5, 10, 10);
+		}
+		//MORE DEBUG - hit boxes
+		g2.drawRect(gapX, gapY, sizeX, sizeY);
+		//___++++++++++++++++++++++++++++____________________________________===============//
 		
 		g2.setTransform(oldTransform); // Restore transform
 	}
@@ -127,6 +152,7 @@ public class Link {
 	 */
 	public double[][] getPinLoc(int i) {
 		double[][] org2Pin = getOrg2Pin(i);
+		System.out.println("getPinLoc Check: " + org2Pin[0][0] +" + "+ r[0]+ " = " + (org2Pin[0][0]+r[0]));
 		return new double[][] { {org2Pin[0][0]+r[0]}, {org2Pin[1][0]+r[1]} };
 	}
 	
@@ -142,10 +168,11 @@ public class Link {
 	}
 	
 	/**
-	 * This function will calculate the size of the image
-	 * @return a double[] that is: (x size, y size)
+	 * This function will calculate the size of the image, setting several important fields for drawing the link
+	 * sizeX and sizeY size the image
+	 * gapX and gapY tell where the top left corner of the image needs to be relative to its mathematical origin
 	 */
-	public double[] calcSize() {
+	public void calcSize() {
 		double minX = getVertX(0);
 		double minY = getVertY(0);
 		double maxX = getVertX(0);
@@ -164,18 +191,21 @@ public class Link {
 				maxY = getVertY(i);
 			}
 		}
-		return new double[] {Math.round(maxX-minX), Math.round(maxY-minY), minX, minY};
+		this.sizeX = (int)Math.round(maxX-minX);
+		this.sizeY = (int)Math.round(maxY-minY);
+		this.gapX = (int)minX;
+		this.gapY = (int)-(sizeY + minY); //because the Y the user enters the pins as is opposite direction of graphics y
 	}
 	
 	//OTHER----------------------------------------------//
 		public void scaleSize(double scaleFactor) {
-			for (int i = 1;i < vertices[0].length;i++) {
-				vertices[0][i] =  vertices[0][i]*scaleFactor;
-				vertices[1][i] =  vertices[1][i]*scaleFactor;
+			for (int i = 0;i < vertices[0].length;i++) {
+				this.vertices[0][i] =  this.vertices[0][i]*scaleFactor;
+				this.vertices[1][i] =  this.vertices[1][i]*scaleFactor;
 			}
-			for (int i = 1;i < pins[0].length;i++) {
-				pins[0][i] =  pins[0][i]*scaleFactor;
-				pins[1][i] =  pins[1][i]*scaleFactor;
+			for (int i = 0;i < pins[0].length;i++) {
+				this.pins[0][i] =  this.pins[0][i]*scaleFactor;
+				this.pins[1][i] =  this.pins[1][i]*scaleFactor;
 			}
 		}
 	
