@@ -1,10 +1,11 @@
 package cityRampage;
 
 import java.util.ArrayList;
+import java.awt.Graphics2D;
 
 public abstract class Linkage {
-	private ArrayList<Link> links;
-	private ArrayList<Constraint> constraints; //all constraints, in order of succession
+	protected ArrayList<Link> links = new ArrayList<>();
+	protected ArrayList<Constraint> constraints = new ArrayList<>(); //all constraints, in order of succession
 	//this will likely be all PinConstraints, but could be more
 	
 	
@@ -20,11 +21,18 @@ public abstract class Linkage {
 		for (int i = 0;i < constraints.size();i++) {
 			constraints.get(i).enactConstraint();
 		}
+		System.out.println("enforce constraints called");//---------TEST CODE
 	}
 	
-	public void draw() {
+	public void draw(Graphics2D g2) {
 		for (int i = 0;i < links.size();i++) {
-			links.get(i).draw();
+			links.get(i).draw(g2);
+		}
+	}
+	
+	public void scaleSize(double scaleFactor) {
+		for (int i = 0;i < links.size();i++) {
+			links.get(i).scaleSize(scaleFactor);
 		}
 	}
 	
