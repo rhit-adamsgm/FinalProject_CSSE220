@@ -12,16 +12,19 @@ import javax.swing.SwingUtilities;
  *  example: Viewer viewer = new Viewer();
  */
 public class Viewer {
+	Model model;
+	static double aspectRatio;
 	
-	public Viewer() {
+	public Viewer(Model model) {
 		SwingUtilities.invokeLater(()-> createGUI());
+		this.model = model;
+		aspectRatio = 2.5;
 	}
 	
 	/**
 	 * ensures: frame is set to proper dimensions and is visible to the user
 	 */
 	private static void createGUI() {
-		double aspectRatio = 2.5;
 		int xWidth = 850;
 		JFrame frame = new JFrame("Map");
 		frame.setSize((int) aspectRatio*xWidth,xWidth);

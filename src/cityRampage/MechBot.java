@@ -95,21 +95,49 @@ public class MechBot extends Linkage {
 	}
 	
 	public void walk() {
-		System.out.println("==========================================");
-		System.out.println("walk called: " + loopSpot);
 		if (loopSpot > 100) loopSpot = 0;
 		//10*Math.sin((loopSpot/100)*Math.PI*2)
-		torso.setX(homeX + 1*loopSpot); //small, slow cycles
+		torso.setX(homeX - 15*Math.sin(Math.PI/2 + (loopSpot/100)*Math.PI*2)); //small, slow cycles
+		//torso.setY(homeY - 15*Math.sin((loopSpot/100)*Math.PI*2));
 		//(Math.PI/4)*Math.sin(loopSpot/100*Math.PI)
-		legF1.sett(Math.PI*(loopSpot/100));
+		legF1.sett( Math.PI*(loopSpot/100) );
 		legF2.sett(Math.PI*(loopSpot/50));
 		legB1.sett(Math.PI*(loopSpot/100));
-		System.out.println("==========================================");
-		System.out.println("Foot Front: " + footF.getr()[0]);
-		System.out.println("Foot Back: " + footB.getr()[0]);
-		System.out.println("torso x: " + torso.getr()[0]);
 		
 		enforceConstaintsInOrder();
 		loopSpot++;
 	}
+	
+	/**
+	 * This makes the mech fall if the feet aren't on the ground
+	 * @param groundLevel is the y-level of the ground
+	 */
+	public void physics(int groundLevel) {
+		//Get info------------------------------------------------------------------------------------//
+		double fy = footF.getY();
+		double by = footB.getY();
+		//Gravity and falling-------------------------------------------------------------------------//
+		if (fy < groundLevel && by < groundLevel) {   //both off the ground
+			System.out.println("====================================");
+			System.out.println("footF: " + footF.getY());
+			System.out.println("footB: " + footB.getY());
+			torso.shiftY(5);
+		}
+		if (fy < groundLevel && by >= groundLevel) { //front off of the ground
+			System.out.println("====================================");
+			System.out.println("footF: " + footF.getY());
+			System.out.println("footB: " + footB.getY());
+			torso.shiftt(Math.PI/180);
+		}
+		if (fy >= groundLevel && by < groundLevel) { //back off of the ground
+			System.out.println("====================================");
+			System.out.println("footF: " + footF.getY());
+			System.out.println("footB: " + footB.getY());
+			torso.shiftt(-Math.PI/180);
+		}
+		//Don't let feet go past the ground-----------------------------------------------------------//
+		if (fy > groundLevel) footF.setY(groundLevel);
+		if (by > groundLevel) footB.setY(groundLevel);
+	}
+	
 }

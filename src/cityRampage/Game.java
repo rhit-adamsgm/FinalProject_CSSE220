@@ -8,6 +8,7 @@ public class Game {
 	private Viewer viewer;
 	private Model model;
 	private Controller controller;
+    private int gameState;  // example stat
 	//----------------------------------------------//
 
 	public static void main(String[] args) {
@@ -18,6 +19,9 @@ public class Game {
 	 * This is basically a main, but callable from within the game. It will restart the game.
 	 */
 	public Game() {
+		model = new Model();
+		controller = new Controller(model, viewer);
+		//Starts the game by opening the start screen
 		startScreen = new StartScreen(() -> onStartScreenClose());
 	}
 	
@@ -26,9 +30,7 @@ public class Game {
 	 */
 	private void onStartScreenClose() {
 		username = startScreen.getReturnedUsername();
-		System.out.println(username);//test code here
-		viewer = new Viewer();
-		
+		viewer = new Viewer(model);
 	}
 
 }

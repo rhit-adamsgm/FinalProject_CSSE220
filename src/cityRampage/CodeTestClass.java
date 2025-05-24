@@ -43,11 +43,13 @@ class DrawingPanel extends JPanel {
 	private Timer baseUnitTimer;
 	private MechBot odob;
 	private Graphics2D g2;
+	private int groundLevel;
 	
 	public DrawingPanel(BufferedImage image) {
 		super();
 		this.image = image;
 		odob = new MechBot(500, 375, 3);
+		groundLevel = 650; //level of the ground in the game
 		
 		int baseDelay = 64; //64 milliseconds will be the base frame rate of our game
 		baseUnitTimer = new Timer(baseDelay, e -> handleBaseFrame(odob));
@@ -59,6 +61,9 @@ class DrawingPanel extends JPanel {
 	    super.paintComponent(g);
 	    g2 = (Graphics2D) g;
 	    odob.draw(g2);
+	    
+	    g2.setColor(Color.DARK_GRAY);
+	    g2.fillRect(0, groundLevel, getWidth(), getHeight()-groundLevel);
 	    
 	    
 	    
@@ -86,6 +91,7 @@ class DrawingPanel extends JPanel {
 	
 	private void handleBaseFrame(MechBot odob) {
 		odob.walk();
+		odob.physics(groundLevel);
 		repaint();
 		
 	}

@@ -73,6 +73,14 @@ public class Link {
 		return r;
 	}
 	
+	public double getX() {
+		return r[0];
+	}
+	
+	public double getY() {
+		return r[1];
+	}
+	
 	public double gett() {
 		return t;
 	}
@@ -110,6 +118,19 @@ public class Link {
 		t = givent;
 	}
 	
+	//SHIFTERS---------------------------------------------------------//
+	public void shiftX(double deltaX) {
+		r[0] =+ r[0] + deltaX;
+	}
+	
+	public void shiftY(double deltaY) {
+		r[1] =+ r[1] + deltaY;
+	}
+	
+	public void shiftt(double deltat) {
+		t =+ t + deltat;
+	}
+	
 	//DRAW-------------------------------------------------------------//
 	public void draw(Graphics2D g2) {
 		AffineTransform oldTransform = g2.getTransform();  // Save current transform
@@ -139,6 +160,9 @@ public class Link {
 		}
 		//MORE DEBUG - hit boxes
 		g2.drawRect(gapX, gapY, sizeX, sizeY);
+		//MORE INFO! - local link origins
+		g2.drawLine(0, 7, 0, -7);//y coord. line
+		g2.drawLine(7, 0, -7, 0);//x coord. line
 		//___++++++++++++++++++++++++++++____________________________________===============//
 		
 		g2.setTransform(oldTransform); // Restore transform
@@ -152,7 +176,6 @@ public class Link {
 	 */
 	public double[][] getPinLoc(int i) {
 		double[][] org2Pin = getOrg2Pin(i);
-		System.out.println("getPinLoc Check: " + org2Pin[0][0] +" + "+ r[0]+ " = " + (org2Pin[0][0]+r[0]));
 		return new double[][] { {org2Pin[0][0]+r[0]}, {org2Pin[1][0]+r[1]} };
 	}
 	
