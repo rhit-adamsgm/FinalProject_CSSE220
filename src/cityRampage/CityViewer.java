@@ -14,16 +14,12 @@ import javax.swing.*;
  * @author Kobe Stoudemire
  * <br>Purpose: Used to show the background after conquer button is pressed
  */
-public class CityView {
+public class CityViewer {
 	private JFrame frame;
 	private CityPanel cityPanel;
 	private InfoPanel infoPanel;
 	private City selectedCity;
 	private static BufferedImage atlBack,denverBack, kcBack, newyorkBack, oblockBack, seattleBack;
-	
-	static {
-		loadAllBackgrounds();
-	}
 	
 	private class InfoPanel extends JPanel {
 		private JLabel cityLabel;
@@ -154,76 +150,9 @@ public class CityView {
 	 * ensures: The correct city is being displayed
 	 * 
 	 */
-	public CityView(City city) {
+	public CityViewer(City city) {
 		this.selectedCity = city;
-		SwingUtilities.invokeLater(() -> createCityGUI());
-	}
-	
-	/**
-	 * ensures: All the background images for the different cities are available
-	 * 
-	 */
-	private static void loadAllBackgrounds() {
-		//atlanta background
-		try {
-			atlBack = ImageIO.read(new File("src/images/atlanta_background.jpg"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			atlBack = null;
-		}
 		
-		//denver background
-		try {
-			denverBack = ImageIO.read(new File("src/images/denver_background.png"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			denverBack = null;
-		}
-		
-		//kansas city background
-		try {
-			kcBack = ImageIO.read(new File("src/images/kansascity_background.jpg"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			kcBack = null;
-		}
-		
-		//new york background
-		try {
-			newyorkBack = ImageIO.read(new File("src/images/new-york.jpeg"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			newyorkBack = null;
-		}
-		
-		//chicago background
-		try {
-			oblockBack = ImageIO.read(new File("src/images/oblock_background.jpg"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			oblockBack = null;
-		}
-		
-		//seattle background
-		try {
-			seattleBack = ImageIO.read(new File("src/images/seattle-streets-21.jpg"));
-		} catch (IOException e) {
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			seattleBack = null;
-		}
-	}
-	
-	/**
-	 * ensures: A new frame with the selected city will be initialized once the conquer button is pressed
-	 * 
-	 */
-	private void createCityGUI() {
 		//new frame that will hold next part of game
 		frame = new JFrame("City: " + selectedCity.getname());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -238,7 +167,8 @@ public class CityView {
 		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		}
+		
+	}
 	
 	public void updateHealth(int newHealth) {
 		if (infoPanel != null) {
@@ -266,30 +196,9 @@ public class CityView {
 		
 		public CityPanel(City city) {
 			this.city = city;
-			backgroundImage = getBackgroundForCity(city.getname());
+			backgroundImage = city.getImage();
 			setPreferredSize(new Dimension(1200, 800));
 		}
-		
-		private BufferedImage getBackgroundForCity(String cityName) {
-            // Return the pre-loaded image based on city name
-            String name = cityName.toLowerCase();
-            
-            if (name.equals("chiraq") || name.equals("chicago")) {
-                return oblockBack;
-            } else if (name.equals("denver")) {
-                return denverBack;
-            } else if (name.equals("atlanta")) {
-                return atlBack;
-            } else if (name.equals("seattle")) {
-                return seattleBack;
-            } else if (name.equals("new york")) {
-                return newyorkBack;
-            } else if (name.equals("kansas city")) {
-                return kcBack;
-            } else {
-                return null; 
-            }
-        }
 		
 		@Override
 		protected void paintComponent(Graphics g) {

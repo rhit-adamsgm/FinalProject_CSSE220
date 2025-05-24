@@ -29,12 +29,6 @@ public class MapPanel extends JPanel {
 	private BufferedImage usMap;
 	private JButton imageButton;
 	private ArrayList<JButton> cityButtons = new ArrayList<>();
-	private City chicago = new City(1000, 300, "Chiraq", "King Von Lurks");
-	private City denver = new City(550, 325, "Denver", "The Hazy City");
-	private City atl = new City(1150, 500, "Atlanta", "Hawks in 5");
-	private City seattle = new City(250, 50, "Seattle", "The Emerald City");
-	private City newyork = new City(1350, 245, "New York", "The Big Apple");
-	private City kansascity = new City(750, 550, "Kansas City", "Home of the Chiefs");
 	private ArrayList<City> cityArray = new ArrayList<>();
 	private City selectedCity = null;
 	private Runnable onConquerCallback;
@@ -43,24 +37,20 @@ public class MapPanel extends JPanel {
 	private String cityNickname;
 	private final int cityX = 300;
 	private final int cityY = 350;
+	
+	
 
 	/**
 	 * ensures: That the buttons show up on the map, bottom panel appears after button clicked,
 	 * and once other button is clicked that the frame is disposed
 	 * 
 	 */
-	public MapPanel() {
+	public MapPanel(Runnable onConquerCallback, ArrayList<City> cityArray) {
+		this.onConquerCallback = onConquerCallback;
+		this.cityArray = cityArray;
+		
 		setPreferredSize(new Dimension(200,500));
 		setLayout(new BorderLayout());
-		
-		
-		// Add cities to the array
-		cityArray.add(denver);
-		cityArray.add(chicago);
-		cityArray.add(atl);
-		cityArray.add(seattle);
-		cityArray.add(newyork);
-		cityArray.add(kansascity);
 
 		//New Panel for bottom of screen
 		bottomPanel = new JPanel(new BorderLayout());
@@ -111,13 +101,7 @@ public class MapPanel extends JPanel {
 				if (selectedCity != null) {
 					System.out.println("Conquering " + selectedCity.getname() + "!");
 					
-					new CityView(selectedCity);
-
-				// Get the parent frame and dispose it
-					JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(MapPanel.this);
-					if (frame != null) {
-						frame.dispose();
-					}
+					onConquerCallback.run();
 				} else {
 					System.out.println("No city selected to conquer!");
 					label.setText("Please select a city first!");
@@ -207,5 +191,9 @@ public class MapPanel extends JPanel {
 			g.setColor(Color.MAGENTA);
 			g.drawString("Background not Found", 50, 50);
 		}
+	}
+	
+	public City getSelectedCity() {
+		return selectedCity;
 	}
 }

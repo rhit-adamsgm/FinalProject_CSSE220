@@ -1,14 +1,30 @@
 package cityRampage;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 public class Game {
 	//fields----------------------------------------//
 		//fields for startup------------------------//
 	private String username;
 	private StartScreen startScreen;
-	private Viewer viewer;
+		//fields for general game function
 	private Model model;
 	private Controller controller;
-    private int gameState;  // example stat
+    private int gameState;  // example state
+    	//fields for map logic
+    private City selectedCity;
+    private MapViewer mapViewer;
+    	//cities object - base game data
+    private static BufferedImage atlBack,denverBack, kcBack, newyorkBack, oblockBack, seattleBack;
+    private City chicago, denver, atl, seattle, newyork, kansascity;
+	private ArrayList<City> cityArray = new ArrayList<>();
+		//mechbot stats - base game data
+	private double mechHealth;
 	//----------------------------------------------//
 
 	public static void main(String[] args) {
@@ -20,17 +36,104 @@ public class Game {
 	 */
 	public Game() {
 		model = new Model();
-		controller = new Controller(model, viewer);
+		//Load data like images and sounds
+		loadAllCityBackgrounds();
+		// Add cities to the array
+		makeCitiesAndCityArray();
+		//controller = new Controller(model, mapViewer);
 		//Starts the game by opening the start screen
 		startScreen = new StartScreen(() -> onStartScreenClose());
 	}
 	
+	//Start screen stuff----------------------------------------------------------------------//
 	/**
 	 * This pushes the code to the true start of the game after the startup screen is closed
 	 */
 	private void onStartScreenClose() {
 		username = startScreen.getReturnedUsername();
-		viewer = new Viewer(model);
+		mapViewer = new MapViewer(model, () -> onMapScreenClose(), cityArray);
+	}
+	
+	
+	//Map stuff-------------------------------------------------------------------------------//
+	private void onMapScreenClose() {
+		selectedCity = mapViewer.getSelectedCity();
+		new CityViewer(selectedCity);
+	}
+	
+	//Data loading to start the game
+	/**
+	 * ensures: All the background images for the different cities are available
+	 * 
+	 */
+	private void loadAllCityBackgrounds() {
+		//atlanta background
+		try {
+			atlBack = ImageIO.read(new File("src/images/atlanta_background.jpg"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			atlBack = null;
+		}
+		
+		//denver background
+		try {
+			denverBack = ImageIO.read(new File("src/images/denver_background.png"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			denverBack = null;
+		}
+		
+		//kansas city background
+		try {
+			kcBack = ImageIO.read(new File("src/images/kansascity_background.jpg"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			kcBack = null;
+		}
+		
+		//new york background
+		try {
+			newyorkBack = ImageIO.read(new File("src/images/new-york.jpeg"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			newyorkBack = null;
+		}
+		
+		//chicago background
+		try {
+			oblockBack = ImageIO.read(new File("src/images/oblock_background.jpg"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			oblockBack = null;
+		}
+		
+		//seattle background
+		try {
+			seattleBack = ImageIO.read(new File("src/images/seattle-streets-21.jpg"));
+		} catch (IOException e) {
+			System.err.println("Caught: " + e.getMessage());
+			e.printStackTrace();
+			seattleBack = null;
+		}
 	}
 
+	private void makeCitiesAndCityArray() {
+		chicago = new City(1000, 300, "Chiraq", "King Von Lurks", oblockBack);
+		denver = new City(550, 325, "Denver", "The Hazy City", denverBack);
+		atl = new City(1150, 500, "Atlanta", "Hawks in 5", atlBack);
+		seattle = new City(250, 50, "Seattle", "The Emerald City", seattleBack);
+		newyork = new City(1350, 245, "New York", "The Big Apple", newyorkBack);
+		kansascity = new City(750, 550, "Kansas City", "Home of the Chiefs", kcBack);
+		cityArray.add(denver);
+		cityArray.add(chicago);
+		cityArray.add(atl);
+		cityArray.add(seattle);
+		cityArray.add(newyork);
+		cityArray.add(kansascity);
+	}
 }

@@ -15,6 +15,7 @@ public class MechBot extends Linkage {
 	private double loopSpot = 0;
 	private double homeX, homeY;
 	private double scaleFactor;
+	private double health;
 	
 	public MechBot(double homeX, double homeY, double scaleFactor) {
 		//Set starting position and scale--------------------------------------------//
@@ -139,5 +140,15 @@ public class MechBot extends Linkage {
 		if (fy > groundLevel) footF.setY(groundLevel);
 		if (by > groundLevel) footB.setY(groundLevel);
 	}
+	
+	//Getters-----------------------------------------------------//
+	public double getHealth() {return health;}
+	
+	//Setters-----------------------------------------------------//
+	public void setHealth(double health) {this.health = health;}
+	
+	//Effectors---------------------------------------------------//
+	public void doDamage(double damage) {health =- damage;}
+	public void doHeal(double heal) {health =+ heal;}
 	
 }
