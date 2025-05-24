@@ -1,12 +1,16 @@
 package cityRampage;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.BorderLayout;
 
 
@@ -29,8 +33,13 @@ public class StartScreen extends JFrame {
 		input  = new JTextField("");
 		input.setEditable(true);
 		textPanel.setLayout(new BorderLayout());
+		
+		input.addActionListener(e -> startGame());
+		
 		textPanel.add(label, BorderLayout.NORTH);
 		textPanel.add(input, BorderLayout.SOUTH);
+		
+		
 		
 		//start game panel
 		buttonPanel = new JPanel();
