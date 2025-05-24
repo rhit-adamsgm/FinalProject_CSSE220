@@ -1,6 +1,10 @@
 package cityRampage;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public abstract class Enemy {
 	int frame; //cycles in between 1 and 4 ONLY EVER
@@ -20,21 +24,37 @@ public abstract class Enemy {
 			frame = 1;
 		}
 	}
+
 	
 	public void update() {
 		nextFrame();
 		draw();
 	}
 	
+	public void imageInit() {
+		try {
+	        image1 = ImageIO.read(new File("src/images/enemy_frame1.png"));
+	        image2 = ImageIO.read(new File("src/images/enemy_frame2.png"));
+	        image3 = ImageIO.read(new File("src/images/enemy_frame3.png"));
+	        image4 = ImageIO.read(new File("src/images/enemy_frame4.png"));
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 	private void setImage() {
 		switch (frame) {
 		case 1:
+			image = image1;
 			break;
 		case 2:
+			image = image2;
 			break;
 		case 3:
+			image = image3;
 			break;
 		case 4:
+			image = image4;
 			break;
 		}
 	}
