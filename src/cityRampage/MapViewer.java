@@ -20,6 +20,7 @@ public class MapViewer {
 	City selectedCity = null;
 	private ArrayList<City> cityArray = new ArrayList<>();
 	MapPanel mapPanel;
+	private boolean disposed = false;
 	
 	public MapViewer(Model model, Runnable onCloseCallback, ArrayList<City> cities) {
 		this.model = model;
@@ -39,10 +40,35 @@ public class MapViewer {
 		frame.setVisible(true);	
 	}
 	
+	public JFrame getFrame() {
+		return frame;
+	}
+	
 	private void onConquerButtonPressed() {
-		frame.dispose();
+		frame.setVisible(false);
 		setSelectedCity();
-		onCloseCallback.run();
+
+		if (onCloseCallback != null) {
+			onCloseCallback.run();
+		}
+	}
+	
+	
+	public void showFrame() {
+		if (!disposed && frame != null) {
+			SwingUtilities.invokeLater(() -> {
+				frame.setVisible(true);
+				frame.toFront();
+				frame.requestFocus();
+			});
+		}
+	}
+	
+	public void dispose() {
+		if (frame != null && !disposed) {
+			frame.dispose();
+			disposed = true;
+		}
 	}
 	
 	private void setSelectedCity() {

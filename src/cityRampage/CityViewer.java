@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
+
 /**
  * Class: CityView
  * @author Kobe Stoudemire
@@ -22,6 +23,7 @@ public class CityViewer {
 	private InfoPanel infoPanel;
 	private City selectedCity;
 	private Runnable onRaidEndCallback;
+	private boolean emperorDead = false;
 	
 	
 
@@ -206,6 +208,20 @@ private class InfoPanel extends JPanel {
 		//start the game play
 		selectedCity.startRaid();
 		
+	}
+	
+	public void onEmperorDeath() {
+		if (emperorDead) {
+			return;
+		}
+		emperorDead = true;
+		selectedCity.endRaid();
+		if (frame != null) {
+            frame.dispose();
+        }
+        if (onRaidEndCallback != null) {
+            onRaidEndCallback.run();
+        }
 	}
 	
 	/**

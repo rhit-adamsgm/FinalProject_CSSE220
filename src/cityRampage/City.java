@@ -56,8 +56,10 @@ public abstract class City {
 		spawnCounter = 0;
 		frameRate = 100; // milliseconds
 		timer = new Timer(frameRate, e -> {
+			if (cityViewer != null && !cityViewer.isPaused()) {
 			spawnCounter++;
 			update();
+			}
 			timerCallback.run();
 		});
 		timer.start();
@@ -70,25 +72,28 @@ public abstract class City {
 	
 	public void passKeyPress2Mech(KeyEvent e) {
 		System.out.println("KeyEvent Registered in City");
+		if (cityViewer != null && !cityViewer.isPaused()) {
 		mechBot.respond(e);
+		}
 	}
 	
 	private void update() {
 		//update and spawn in new enemies
-		boolean atEmperor = false;
+		int enemiesAtEmperor = 0;
 		for (Enemy enemy : enemies) {
 			if (enemy.xpos <= emperorX + 70) {
 				enemy.speed = 0;
-				atEmperor = true;
+				enemiesAtEmperor++;
 			} else {
 				enemy.update();
 			}
 		}
 		
-		if (atEmperor) {
+		if (enemiesAtEmperor > 0) {
 			damageFrameCounter++;
 			if (damageFrameCounter >= 10) {
-				emperor.reduceHealth(5);
+				int totalDamage = 5 * enemiesAtEmperor;
+				emperor.reduceHealth(totalDamage);
 				cityViewer.updateHealth(emperor.getHealth());
 				
 				if (emperor.getHealth() <= 0) {
@@ -111,6 +116,7 @@ public abstract class City {
 		mechBot.physics(groundY);
 		
 	}
+	
 	
 	//specific in the abstract class for now
 	private void spawnEnemyPerson() {

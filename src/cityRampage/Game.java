@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
 
 public class Game {
 	//fields----------------------------------------//
 		//fields for startup------------------------//
 	private String username;
+	private boolean raidEnding;
 	private StartScreen startScreen;
 		//fields for general game architecture
 	private Model model;
@@ -59,16 +61,29 @@ public class Game {
 	
 	//Map stuff-------------------------------------------------------------------------------//
 	private void onMapScreenClose() {
+		raidEnding = false;
 		selectedCity = mapViewer.getSelectedCity();
 		cityViewer = new CityViewer(selectedCity,() -> onCityRaidEnd());
 	}
 	
 	//CityViewer stuff
 	private void onCityRaidEnd() {
-		//NOTE: city viewer owns it's own frame and can dispose that
-		cityViewer.endRaid();
-		mapViewer = new MapViewer(model, () -> onMapScreenClose(), cityArray);
+		// NOTE: city viewer owns it's own frame and can dispose that
+		if (raidEnding) {
+			return;
+		}
+		raidEnding = true;
+		
+		cityViewer = null;
+
+		SwingUtilities.invokeLater(() -> {
+			if (mapViewer != null) {
+				mapViewer.showFrame();
+			} 
+			raidEnding = false;
+		});
 	}
+	
 	
 	//Data loading to start the game----------------------------------------------------------//
 	/**
