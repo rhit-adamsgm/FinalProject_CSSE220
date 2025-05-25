@@ -11,6 +11,10 @@ public class Emperor {
 	BufferedImage emperor;
 	public int health = 100;
 	
+	public Emperor() {
+		imageinit();
+	}
+	
 	
 	public void imageinit() {
 		try {

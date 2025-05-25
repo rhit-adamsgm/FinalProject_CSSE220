@@ -13,6 +13,8 @@ public abstract class City {
 	BufferedImage image;
 	//MechBot------------------//
 	MechBot mechBot;
+	//Emperor-----------------//
+	Emperor emperor;
 	//Enemies------------------//
 	ArrayList<Enemy> enemies = new ArrayList<>(); //this ArrayList holds all of the current, on screen enemies
 	//Game play fields---------//
@@ -34,6 +36,8 @@ public abstract class City {
 		//
 		//initialize MechBot instance
 		mechBot = new MechBot(400,frameHeight/2,3);
+		//initialize emperor instance
+		emperor = new Emperor();
 		//enemy data, start with an enemy
 		numEnemiesSpawned = 0;
 		spawnEnemyPerson();
@@ -111,6 +115,7 @@ public abstract class City {
 	//Graphics--------------------------------------//
 	public void draw(Graphics2D g2) {
 		mechBot.draw(g2);
+		g2.drawImage(emperor.emperor, 0, 490, 125, 200, null);
 		for (Enemy enemy: enemies) {
 			enemy.draw(g2);
 		}
