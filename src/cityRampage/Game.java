@@ -19,6 +19,8 @@ public class Game {
     	//fields for map logic
     private City selectedCity;
     private MapViewer mapViewer;
+    	//fields for CityViewer logic
+    private CityViewer cityViewer;
     	//cities object - base game data
     private static BufferedImage atlBack,denverBack, kcBack, newyorkBack, oblockBack, seattleBack;
     private City chicago, denver, atl, seattle, newyork, kansascity;
@@ -58,7 +60,14 @@ public class Game {
 	//Map stuff-------------------------------------------------------------------------------//
 	private void onMapScreenClose() {
 		selectedCity = mapViewer.getSelectedCity();
-		new CityViewer(selectedCity);
+		cityViewer = new CityViewer(selectedCity,() -> onCityRaidEnd());
+	}
+	
+	//CityViewer stuff
+	private void onCityRaidEnd() {
+		//NOTE: city viewer owns it's own frame and can dispose that
+		cityViewer.endRaid();
+		mapViewer = new MapViewer(model, () -> onMapScreenClose(), cityArray);
 	}
 	
 	//Data loading to start the game----------------------------------------------------------//

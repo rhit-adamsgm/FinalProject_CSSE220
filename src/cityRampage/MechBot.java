@@ -159,6 +159,10 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		}
 	}
 	
+	/**
+	 * sets ever-changing input values: dt#(F/B)
+	 * @param e
+	 */
 	public void respond(KeyEvent e) {
 		System.out.println("KeyEvent registered in MechBot");
 		switch (e.getKeyCode()) {
