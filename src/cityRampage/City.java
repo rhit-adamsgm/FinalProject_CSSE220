@@ -12,7 +12,9 @@ public abstract class City {
 	private Runnable timerCallback;
 	private int xMapCoord, yMapCoord;
 	protected String name, nickname;
+	private int damageFrameCounter = 0;
 	BufferedImage image;
+	private CityViewer cityViewer;
 	//MechBot------------------//
 	MechBot mechBot;
 	//Emperor-----------------//
@@ -25,13 +27,20 @@ public abstract class City {
 	protected int maxEnemies, enemyInterval; //max enemies that are to be spawned, interval to spawn them at
 	protected int frameHeight, frameWidth;
 	protected int groundY;
+	protected int emperorX = 0;
+	protected int emperorY = 490;
 	
-	
+
 	public City(int xMapCoord, int yMapCoord, BufferedImage backImage) {
 		this.xMapCoord = xMapCoord;
 		this.yMapCoord = yMapCoord;
-		this.image = backImage;;
+		this.image = backImage;
 	}
+	
+	public void setCityViewer(CityViewer viewer) {
+		this.cityViewer = viewer;
+	}
+	
 	
 	//Game run functions (not dormant)-------------//
 	public void startRaid() {
@@ -65,9 +74,26 @@ public abstract class City {
 	
 	private void update() {
 		//update and spawn in new enemies
+		boolean atEmperor = false;
 		for (Enemy enemy : enemies) {
-			enemy.update();
+			if (enemy.xpos <= emperorX + 70) {
+				enemy.speed = 0;
+				atEmperor = true;
+			} else {
+				enemy.update();
+			}
 		}
+		if (atEmperor) {
+			damageFrameCounter++;
+			if (damageFrameCounter >= 10) {
+				emperor.reduceHealth(5);
+				cityViewer.updateHealth(emperor.getHealth());
+				damageFrameCounter = 0;
+			}
+		} else {
+			damageFrameCounter = 0;
+		}
+		
 		if (spawnCounter >= enemyInterval/frameRate && numEnemiesSpawned < maxEnemies) {
 			spawnCounter = 0;
 			spawnEnemyPerson();
@@ -121,7 +147,7 @@ public abstract class City {
 	//Graphics--------------------------------------//
 	public void draw(Graphics2D g2) {
 		mechBot.draw(g2);
-		g2.drawImage(emperor.emperor, 0, 490, 125, 200, null);
+		g2.drawImage(emperor.emperor, emperorX, emperorY, 125, 200, null);
 		for (Enemy enemy: enemies) {
 			enemy.draw(g2);
 		}

@@ -25,7 +25,7 @@ public class Emperor {
 	}
 	
 	public void reduceHealth(int amount) {
-		health = Math.max(amount, health - amount);
+		health = Math.max(0, health - amount);
 	}
 	
 	public int getHealth() {

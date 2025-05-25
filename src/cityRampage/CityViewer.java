@@ -169,6 +169,9 @@ private class InfoPanel extends JPanel {
 		//give the city the width and height of the frame it is in
 		selectedCity.setFrameSize(frameWidth, cityPHeight);
 		
+		//Connect city to cityviewer
+		selectedCity.setCityViewer(this);
+		
 		//new frame that will hold next part of game
 		frame = new JFrame("City: " + selectedCity.getname());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
