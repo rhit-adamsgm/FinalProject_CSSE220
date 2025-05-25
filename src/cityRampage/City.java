@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.Timer;
 
 public abstract class City {
@@ -55,6 +57,10 @@ public abstract class City {
 	
 	public void endRaid() {
 		timer.stop();
+	}
+	
+	public void passKeyPress2Mech(KeyEvent e) {
+		mechBot.respond(e);
 	}
 	
 	private void update() {

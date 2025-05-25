@@ -3,6 +3,8 @@ package cityRampage;
 import java.awt.*;
 
 import java.awt.image.BufferedImage;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -184,6 +186,15 @@ private class InfoPanel extends JPanel {
 		
 		//set the timer call back function
 		selectedCity.setTimerCallback(() -> cityPanel.repaint());
+		
+		//set the key listener that will route to the mech
+		frame.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				selectedCity.passKeyPress2Mech(e);
+			}
+		});
+		
 		 
 		//start the game play
 		selectedCity.startRaid();

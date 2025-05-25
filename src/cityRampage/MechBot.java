@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.imageio.ImageIO;
 
@@ -95,6 +97,13 @@ public class MechBot extends Linkage {
   	    //-----------------------------------------------------------------------------------------------//
 	}
 	
+	public void respond(KeyEvent e) {
+		
+	}
+	
+	/**
+	 * This function is solely to move the legs in a 
+	 */
 	public void walk() {
 		if (loopSpot > 100) loopSpot = 0;
 		//10*Math.sin((loopSpot/100)*Math.PI*2)
