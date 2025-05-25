@@ -35,7 +35,12 @@ class TestEnemy extends Enemy {
     
     public TestEnemy() {
         super();
-        try {
+        xpos = 50;  // Start from right side
+        ypos = 200;
+    }
+    
+    public void imageInit() {
+    	try {
             image1 = ImageIO.read(new File("src/images/enemy_frame1.png"));
             image2 = ImageIO.read(new File("src/images/enemy_frame2.png"));
             image3 = ImageIO.read(new File("src/images/enemy_frame3.png"));
@@ -43,8 +48,6 @@ class TestEnemy extends Enemy {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        xpos = 50;  // Start from right side
-        ypos = 200;
     }
     
     @Override
@@ -78,14 +81,15 @@ class AnimationPanel extends JPanel {
             // Optional: flip the image based on direction if you want
             Graphics2D g2d = (Graphics2D) g;
             
-            if (((TestEnemy) enemy).direction == 1) {
+            if (((TestEnemy) enemy).direction == -1) {
                 // Flip horizontally for left movement
                 g2d.drawImage(enemy.image, 
                     (int) enemy.xpos + enemy.image.getWidth(), (int) enemy.ypos,
                     -enemy.image.getWidth(), enemy.image.getHeight(), null);
             } else {
                 // Normal drawing for right movement
-                g2d.drawImage(enemy.image, (int) enemy.xpos, (int) enemy.ypos, null);
+            	enemy.draw(g2d);
+                //g2d.drawImage(enemy.image, (int) enemy.xpos, (int) enemy.ypos, null);
             }
         }
     }

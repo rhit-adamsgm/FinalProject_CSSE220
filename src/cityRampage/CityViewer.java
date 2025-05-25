@@ -19,9 +19,14 @@ public class CityViewer {
 	private CityPanel cityPanel;
 	private InfoPanel infoPanel;
 	private City selectedCity;
-	private static BufferedImage atlBack,denverBack, kcBack, newyorkBack, oblockBack, seattleBack;
 	
-	private class InfoPanel extends JPanel {
+	
+
+	private int frameWidth, frameHeight;
+	private int infoPHeight, cityPHeight;
+	private Runnable timerCallback;
+	
+private class InfoPanel extends JPanel {
 		private JLabel cityLabel;
 		private JProgressBar healthBar;
 		private JProgressBar progressBar;
@@ -73,7 +78,7 @@ public class CityViewer {
 			setLayout(new BorderLayout());
 			setBackground(new Color(240, 240, 240));
 			setBorder(BorderFactory.createRaisedBevelBorder());
-			setPreferredSize(new Dimension(getWidth(), 80));
+			setPreferredSize(new Dimension(frameWidth, infoPHeight));
 			
 			JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			leftPanel.setBackground(new Color(240,240,240));
@@ -145,7 +150,7 @@ public class CityViewer {
 			return isPaused;
 		}
 	}
-	
+
 	/**
 	 * ensures: The correct city is being displayed
 	 * 
@@ -153,10 +158,19 @@ public class CityViewer {
 	public CityViewer(City city) {
 		this.selectedCity = city;
 		
+		//store the size of the panels
+		frameWidth = 1200;
+		frameHeight = 800;
+		infoPHeight = 80;
+		cityPHeight = frameHeight - infoPHeight;
+		
+		//give the city the width and height of the frame it is in
+		selectedCity.setFrameSize(frameWidth, cityPHeight);
+		
 		//new frame that will hold next part of game
 		frame = new JFrame("City: " + selectedCity.getname());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(1200, 800);
+		frame.setSize(frameWidth, frameHeight);
 		frame.setLayout(new BorderLayout());
 		
 		cityPanel = new CityPanel(selectedCity);
@@ -167,6 +181,12 @@ public class CityViewer {
 		
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+		
+		//set the timer call back function
+		selectedCity.setTimerCallback(() -> cityPanel.repaint());
+		 
+		//start the game play
+		selectedCity.startRaid();
 		
 	}
 	
@@ -193,20 +213,24 @@ public class CityViewer {
 	private class CityPanel extends JPanel {
 		private BufferedImage backgroundImage;
 		private City city;
+		private Graphics2D g2;
 		
 		public CityPanel(City city) {
 			this.city = city;
 			backgroundImage = city.getImage();
-			setPreferredSize(new Dimension(1200, 800));
+			setPreferredSize(new Dimension(frameWidth, cityPHeight));
 		}
 		
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
+			g2 = (Graphics2D) g;
 			
 			if (backgroundImage != null) {
 				g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 			}
+			
+			city.draw(g2);
 		}
 	}
 }

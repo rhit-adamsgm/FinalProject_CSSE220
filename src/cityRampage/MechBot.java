@@ -119,26 +119,19 @@ public class MechBot extends Linkage {
 		double by = footB.getY();
 		//Gravity and falling-------------------------------------------------------------------------//
 		if (fy < groundLevel && by < groundLevel) {   //both off the ground
-			System.out.println("====================================");
-			System.out.println("footF: " + footF.getY());
-			System.out.println("footB: " + footB.getY());
 			torso.shiftY(5);
 		}
 		if (fy < groundLevel && by >= groundLevel) { //front off of the ground
-			System.out.println("====================================");
-			System.out.println("footF: " + footF.getY());
-			System.out.println("footB: " + footB.getY());
 			torso.shiftt(Math.PI/180);
 		}
 		if (fy >= groundLevel && by < groundLevel) { //back off of the ground
-			System.out.println("====================================");
-			System.out.println("footF: " + footF.getY());
-			System.out.println("footB: " + footB.getY());
 			torso.shiftt(-Math.PI/180);
 		}
 		//Don't let feet go past the ground-----------------------------------------------------------//
 		if (fy > groundLevel) footF.setY(groundLevel);
 		if (by > groundLevel) footB.setY(groundLevel);
+		
+		enforceConstaintsInOrder();
 	}
 	
 	//Getters-----------------------------------------------------//

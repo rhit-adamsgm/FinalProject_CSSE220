@@ -64,29 +64,6 @@ class DrawingPanel extends JPanel {
 	    
 	    g2.setColor(Color.DARK_GRAY);
 	    g2.fillRect(0, groundLevel, getWidth(), getHeight()-groundLevel);
-	    
-	    
-	    
-	    
-	    
-	    /**
-	    //Make the test link--------------------------//
-	    double[][] verts1 = new double[][] { {0, 0, 140, 140},
-	    									 {0, 30, 30, 0} };
-	    double[][] pins1 = new double[][] { {-10, 150}, {14, 14} };
-	    
-	    
-	    Link testLink = new Link(verts1, pins1, image, g2);
-	    testLink.setr(new double[] {500,375});
-	    testLink.draw();
-	    double[] testLinkr = new double[] {500, 375};
-	    for (int i=0;i<20;i++) {
-	    	testLinkr[1] = 375 + i*10;
-	    	testLink.setr(testLinkr);
-	    	testLink.sett(i*Math.PI/12);
-	    	testLink.draw();
-	    }
-	    */
 	}
 	
 	private void handleBaseFrame(MechBot odob) {

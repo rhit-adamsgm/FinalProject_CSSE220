@@ -12,7 +12,7 @@ public class Game {
 		//fields for startup------------------------//
 	private String username;
 	private StartScreen startScreen;
-		//fields for general game function
+		//fields for general game architecture
 	private Model model;
 	private Controller controller;
     private int gameState;  // example state
@@ -36,7 +36,7 @@ public class Game {
 	 */
 	public Game() {
 		model = new Model();
-		//Load data like images and sounds
+		//LOADDATA: loading in all the data like images and sounds
 		loadAllCityBackgrounds();
 		// Add cities to the array
 		makeCitiesAndCityArray();
@@ -61,7 +61,7 @@ public class Game {
 		new CityViewer(selectedCity);
 	}
 	
-	//Data loading to start the game
+	//Data loading to start the game----------------------------------------------------------//
 	/**
 	 * ensures: All the background images for the different cities are available
 	 * 
@@ -123,12 +123,12 @@ public class Game {
 	}
 
 	private void makeCitiesAndCityArray() {
-		chicago = new City(1000, 300, "Chiraq", "King Von Lurks", oblockBack);
-		denver = new City(550, 325, "Denver", "The Hazy City", denverBack);
-		atl = new City(1150, 500, "Atlanta", "Hawks in 5", atlBack);
-		seattle = new City(250, 50, "Seattle", "The Emerald City", seattleBack);
-		newyork = new City(1350, 245, "New York", "The Big Apple", newyorkBack);
-		kansascity = new City(750, 550, "Kansas City", "Home of the Chiefs", kcBack);
+		chicago = new Chiraq(1000, 300, oblockBack);
+		denver = new Denver(550, 325, denverBack);
+		atl = new Atlanta(1150, 500, atlBack);
+		seattle = new Seattle(250, 50, seattleBack);
+		newyork = new NewYork(1350, 245, newyorkBack);
+		kansascity = new KansasCity(750, 550, kcBack);
 		cityArray.add(denver);
 		cityArray.add(chicago);
 		cityArray.add(atl);
