@@ -18,12 +18,18 @@ public class MechBot extends Linkage {
 	private double homeX, homeY;
 	private double scaleFactor;
 	private double health;
+	//fields for handling user input
+	private double dt1F, dt2F, dt1B, dt2B;
 	
-	public MechBot(double homeX, double homeY, double scaleFactor) {
+public MechBot(double homeX, double homeY, double scaleFactor) {
 		//Set starting position and scale--------------------------------------------//
 		this.homeX = homeX;
 		this.homeY = homeY;
 		this.scaleFactor = scaleFactor;
+		this.dt1F = 0;
+		this.dt2F = 0;
+		this.dt1B = 0;
+		this.dt2B = 0;
 		//-----------------------------------------------------------------------------------------------//
 		//Define Torso Link------------------------------------------------------------------------------//
 		double[][] torsoVerts = new double[][] { {0, 39, 39, 40.5, 36.75, 30, 1.5, 0, -3.75, -3.75, -1.5},
@@ -96,9 +102,91 @@ public class MechBot extends Linkage {
   	    torso.setY(homeY);
   	    //-----------------------------------------------------------------------------------------------//
 	}
+
+	/**
+	 * returns true if the link is in the bottom half of the arc, false if in the top half
+	 * @param link
+	 * @return
+	 */
+	private Boolean checkBotArc(Link link) {
+		if (link.gett()%(2*Math.PI) < 0 || link.gett()%(2*Math.PI) > Math.PI) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private void swivelLegFB(Link topLeg, Link botLeg, double topLegD, double botLegD) {
+		//move the top leg
+		if (checkBotArc(legF1)) {
+			dt1F = dt1F + Math.toRadians(topLegD);
+		} else {
+			dt1F = dt1F - Math.toRadians(topLegD);
+		}
+		//move the bottom leg
+		if (checkBotArc(legF2)) {
+			dt2F = dt2F + Math.toRadians(botLegD);
+		} else {
+			dt2F = dt2F - Math.toRadians(botLegD);
+		}
+	}
+	
+	/**
+	 * returns true if the link is in the front half of the arc, false if in the back half (vertical middle line)
+	 * @param link
+	 * @return
+	 */
+	private Boolean checkFrontArc(Link link) {
+		if (link.gett()%(2*Math.PI) < Math.PI/2 || link.gett()%(2*Math.PI) > 3*Math.PI/2) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private void swivelLegUD(Link topLeg, Link botLeg, double topLegD, double botLegD) {
+		//move the top leg
+		if (checkFrontArc(legF1)) {
+			dt1F = dt1F + Math.toRadians(topLegD);
+		} else {
+			dt1F = dt1F - Math.toRadians(topLegD);
+		}
+		//move the bottom leg
+		if (checkFrontArc(legF2)) {
+			dt2F = dt2F + Math.toRadians(botLegD);
+		} else {
+			dt2F = dt2F - Math.toRadians(botLegD);
+		}
+	}
 	
 	public void respond(KeyEvent e) {
-		
+		System.out.println("KeyEvent registered in MechBot");
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_J:	//front leg left
+				swivelLegFB(legF1, legF2, -5, -10);
+				break;
+			case KeyEvent.VK_I: //front leg up
+				swivelLegUD(legF1, legF2, 5, 2);
+				break;
+			case KeyEvent.VK_L:	//front leg right
+				swivelLegFB(legF1, legF2, 5, 10);
+				break;
+			case KeyEvent.VK_K:	//front leg down
+				swivelLegUD(legF1, legF2, -5, -2);
+				break;
+			case KeyEvent.VK_A:	//back leg left
+				swivelLegFB(legB1, legB2, -5, -10);
+				break;
+			case KeyEvent.VK_W: //back leg up
+				swivelLegUD(legB1, legB2, 5, 2);
+				break;
+			case KeyEvent.VK_D:	//back leg right
+				swivelLegFB(legB1, legB2, 5, 10);
+				break;
+			case KeyEvent.VK_S:	//back leg down
+				swivelLegUD(legB1, legB2, -5, -2);
+				break;
+		}
 	}
 	
 	/**

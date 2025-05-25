@@ -84,6 +84,12 @@ class TestEnemy extends Enemy {
         // Always animate when moving
         super.update();
     }
+
+	@Override
+	public void imageInit() {
+		// TODO Auto-generated method stub
+		
+	}
 }
  
 // Panel to draw the enemy
