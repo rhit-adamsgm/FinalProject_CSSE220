@@ -107,8 +107,7 @@ public abstract class City {
 			spawnEnemyPerson();
 		}
 		//MechBot operation
-		mechBot.walk();
-		mechBot.physics(groundY);
+		mechBot.handleMovement(groundY);
 		
 	}
 	

@@ -193,6 +193,107 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		}
 	}
 	
+	private void clearLastInput() {
+		dt1F = 0;
+		dt2F = 0;
+		dt1B = 0;
+		dt2B = 0;
+	}
+	
+	/**
+	 * This function figures out what feet are touching the ground, and returns an indicator of this
+	 * @return
+	 */
+	private int parseGroundContact(int groundLevel) {
+		//Get info------------------------------------------------------------------------------------//
+		double fy = footF.getY();
+		double by = footB.getY();
+		//Gravity and falling-------------------------------------------------------------------------//
+		if (fy < groundLevel && by < groundLevel) {   //both off the ground
+			return 0;
+		}
+		if (fy < groundLevel && by >= groundLevel) { //front off of the ground ONLY
+			return 1;
+		}
+		if (fy >= groundLevel && by < groundLevel) { //back off of the ground ONLY
+			return 2;
+		}
+		return 3; //both feet are on the ground
+	}
+	
+	/**
+	 * THIS is the MOST IMPORTANT function internally to the MechBot
+	 * in terms of actually moving the bot. It parses ground contact,
+	 * and decides what to do from there
+	 * @param groundLevel
+	 */
+	public void handleMovement(int groundLevel) {
+		switch (parseGroundContact(groundLevel)) {
+			case 0: //floating in air
+				frontFreeRotate();
+				backFreeRotate();
+				fall();
+				clearLastInput();
+				enforceConstraintsInOrder();
+				break;
+			case 1: //back foot on ground
+				frontFreeRotate();
+				handleBackFootContact();
+				clearLastInput();
+				enforceConstraintsInOrder();
+				break;
+			case 2: //front foot on ground
+				backFreeRotate();
+				handleFrontFootContact();
+				clearLastInput();
+				enforceConstraintsInOrder();
+				break;
+			case 3: //both feet on the ground
+				handleBackFootContact();
+				clearLastInput();
+				enforceConstraintsInOrder();
+				break;	
+		}
+	}
+	
+	private void handleFrontFootContact() {
+		double x1 = footF.getX();
+		double y1 = footF.getY();
+		legB1.shiftt(dt1F);
+		legB2.shiftt(dt2F);
+		enforceConstraintsInOrder();
+		double xShift = footF.getX() - x1;
+		double yShift = footF.getY() - y1;
+		torso.shiftX(-xShift);
+		torso.shiftY(-yShift);
+	}
+	
+	private void handleBackFootContact() {
+		double x1 = footB.getX();
+		double y1 = footB.getY();
+		legB1.shiftt(dt1B);
+		legB2.shiftt(dt2B);
+		enforceConstraintsInOrder();
+		double xShift = footB.getX() - x1;
+		double yShift = footB.getY() - y1;
+		torso.shiftX(-xShift);
+		torso.shiftY(-yShift);
+	}
+	
+	private void backFreeRotate() {
+		legB1.shiftt(dt1B);
+		legB2.shiftt(dt2B);
+	}
+	
+	private void frontFreeRotate() {
+		legF1.shiftt(dt1F);
+		legF2.shiftt(dt2F);
+	}
+	
+	private void fall() {
+		torso.shiftY(5);
+	}
+	
 	/**
 	 * This function is solely to move the legs in a 
 	 */
@@ -206,7 +307,7 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		legF2.sett(Math.PI*(loopSpot/50));
 		legB1.sett(Math.PI*(loopSpot/100));
 		
-		enforceConstaintsInOrder();
+		enforceConstraintsInOrder();
 		loopSpot++;
 	}
 	
@@ -232,7 +333,7 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		if (fy > groundLevel) footF.setY(groundLevel);
 		if (by > groundLevel) footB.setY(groundLevel);
 		
-		enforceConstaintsInOrder();
+		enforceConstraintsInOrder();
 	}
 	
 	//Getters-----------------------------------------------------//
