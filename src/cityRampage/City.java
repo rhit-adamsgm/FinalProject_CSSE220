@@ -84,11 +84,18 @@ public abstract class City {
 				enemy.update();
 			}
 		}
+		
 		if (atEmperor) {
 			damageFrameCounter++;
 			if (damageFrameCounter >= 10) {
 				emperor.reduceHealth(5);
 				cityViewer.updateHealth(emperor.getHealth());
+				
+				if (emperor.getHealth() <= 0) {
+					cityViewer.endRaid();
+					return;
+				}
+				
 				damageFrameCounter = 0;
 			}
 		} else {

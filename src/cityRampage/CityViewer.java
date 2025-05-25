@@ -21,6 +21,7 @@ public class CityViewer {
 	private CityPanel cityPanel;
 	private InfoPanel infoPanel;
 	private City selectedCity;
+	private Runnable onRaidEndCallback;
 	
 	
 
@@ -158,9 +159,9 @@ private class InfoPanel extends JPanel {
 	 * ensures: The correct city is being displayed
 	 * 
 	 */
-	public CityViewer(City city, Runnable onCloseCallback) {
+	public CityViewer(City city, Runnable onRaidEnd) {
 		this.selectedCity = city;
-		this.onCloseCallback = onCloseCallback;
+		this.onRaidEndCallback = onRaidEnd;
 		
 		//store the size of the panels
 		frameWidth = 1200;
@@ -211,8 +212,12 @@ private class InfoPanel extends JPanel {
 	 * handle the details of closing the city raid instance down - called from Game
 	 */
 	public void endRaid() {
+		if (frame != null) {
 		frame.dispose();
-		selectedCity.endRaid();
+		}
+		if (onRaidEndCallback != null) {
+			onRaidEndCallback.run();
+		}
 	}
 	
 	/**
