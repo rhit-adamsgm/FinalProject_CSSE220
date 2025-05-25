@@ -76,10 +76,6 @@ public abstract class Enemy {
 		g2.drawRect(-sizeX/2, -sizeY/2, sizeX, sizeY);
 		
 		g2.setTransform(oldTransform); // Restore transform
-		
-		System.out.println("enemy drawn");
-		System.out.println("frame: " + frame + " x-y: (" + xpos + "," + ypos + ")");
-		System.out.println("Height: " + sizeY + " Width: " + sizeX);
 	}
 	
 }

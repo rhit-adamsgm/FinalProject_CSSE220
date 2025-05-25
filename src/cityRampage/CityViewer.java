@@ -188,12 +188,13 @@ private class InfoPanel extends JPanel {
 		frame.setVisible(true);
 		
 		//set the timer call back function
-		selectedCity.setTimerCallback(() -> cityPanel.repaint());
+		selectedCity.setTimerCallback(() -> viewerUpdate());
 		
 		//set the key listener that will route to the mech
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				System.out.println("KeyEvent Registered in CityViewer");
 				selectedCity.passKeyPress2Mech(e);
 			}
 		});
@@ -202,6 +203,14 @@ private class InfoPanel extends JPanel {
 		//start the game play
 		selectedCity.startRaid();
 		
+	}
+	
+	/**
+	 * Is what is called every time the timer triggers - makes the screen update and requests focus
+	 */
+	public void viewerUpdate() {
+		cityPanel.repaint();
+		frame.requestFocusInWindow();
 	}
 	
 	public void updateHealth(int newHealth) {

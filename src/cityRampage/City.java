@@ -69,6 +69,7 @@ public abstract class City {
 	}
 	
 	public void passKeyPress2Mech(KeyEvent e) {
+		System.out.println("KeyEvent Registered in City");
 		mechBot.respond(e);
 	}
 	
