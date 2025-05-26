@@ -52,7 +52,7 @@ public class MapViewer {
 			onCloseCallback.run();
 		}
 	}
-	
+
 	
 	public void showFrame() {
 		if (!disposed && frame != null) {

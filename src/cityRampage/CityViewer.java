@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
-
 /**
  * Class: CityView
  * @author Kobe Stoudemire

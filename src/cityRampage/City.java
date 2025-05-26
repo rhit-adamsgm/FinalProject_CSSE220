@@ -117,7 +117,6 @@ public abstract class City {
 		
 	}
 	
-	
 	//specific in the abstract class for now
 	private void spawnEnemyPerson() {
 		EnemyPerson enemy = new EnemyPerson(frameWidth, groundY-72);

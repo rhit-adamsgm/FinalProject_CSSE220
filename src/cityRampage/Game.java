@@ -57,8 +57,7 @@ public class Game {
 		username = startScreen.getReturnedUsername();
 		mapViewer = new MapViewer(model, () -> onMapScreenClose(), cityArray);
 	}
-	
-	
+		
 	//Map stuff-------------------------------------------------------------------------------//
 	private void onMapScreenClose() {
 		raidEnding = false;
