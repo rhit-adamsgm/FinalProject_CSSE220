@@ -283,19 +283,30 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 				enforceConstraintsInOrder();
 				break;
 			case 3: //both feet on the ground
-				handleFrontFootContact();
-				handleBackFootContact();
+				handleBothFootContact();
 				clearLastInput();
 				enforceConstraintsInOrder();
 				break;	
 		}
 	}
 	
+	private void handleBothFootContact() {
+		double y1 = footF.getY();
+		double y2 = footB.getY();
+		legF1.shiftt(dt1F);
+		legF2.shiftt(dt2F);
+		legB1.shiftt(dt1B);
+		legB2.shiftt(dt2B);
+		enforceConstraintsInOrder();
+		double yShift = (footB.getY() - y2) + (footF.getY() - y1);
+		torso.shiftY(-Math.abs(yShift*5));
+	}
+	
 	private void handleFrontFootContact() {
 		double x1 = footF.getX();
 		double y1 = footF.getY();
-		legB1.shiftt(dt1F);
-		legB2.shiftt(dt2F);
+		legF1.shiftt(dt1F);
+		legF2.shiftt(dt2F);
 		enforceConstraintsInOrder();
 		double xShift = footF.getX() - x1;
 		double yShift = footF.getY() - y1;
