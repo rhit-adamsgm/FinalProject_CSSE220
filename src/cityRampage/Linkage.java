@@ -17,7 +17,7 @@ public abstract class Linkage {
 		constraints.add(constraint);
 	}
 	
-	public void enforceConstaintsInOrder() {
+	public void enforceConstraintsInOrder() {
 		for (int i = 0;i < constraints.size();i++) {
 			constraints.get(i).enactConstraint();
 		}
