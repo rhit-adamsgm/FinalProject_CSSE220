@@ -16,6 +16,7 @@ public abstract class City {
 	private int damageFrameCounter = 0;
 	BufferedImage image;
 	private CityViewer cityViewer;
+	protected Boolean beenDefeated = false;
 	//MechBot------------------//
 	MechBot mechBot;
 	//Emperor-----------------//
@@ -72,6 +73,14 @@ public abstract class City {
 		enemies.clear();
 	}
 	
+	public void setDefeated() {
+		beenDefeated = true;
+	}
+	
+	public Boolean getDefeated() {
+		return beenDefeated;
+	}
+	
 	public void passKeyPress2Mech(KeyEvent e) {
 		if (cityViewer != null && !cityViewer.isPaused()) {
 		mechBot.respond(e);
@@ -117,6 +126,16 @@ public abstract class City {
 		
 		//Collision handler
 		dealWithCollisions();
+		
+		//detectWin
+		detectWin();
+	}
+	
+	public void detectWin() {
+		if (enemies.size() == 0 && numEnemiesSpawned >= maxEnemies) {
+			setDefeated();
+			cityViewer.endRaid();
+		}
 	}
 	
 	public void dealWithCollisions() {

@@ -25,7 +25,7 @@ public class MapPanel extends JPanel {
 	private JButton conquer;
 	private JPanel bottomPanel;
 	private JButton cityButton;
-	BufferedImage damagedCity;
+	ImageIcon damagedCity, normalCity;
 	private BufferedImage usMap;
 	private JButton imageButton;
 	private ArrayList<JButton> cityButtons = new ArrayList<>();
@@ -84,15 +84,15 @@ public class MapPanel extends JPanel {
 			usMap = null;
 		}
 		
-		//Damaged city image
-		try {
-			damagedCity = ImageIO.read(new File("src/images/Map City Smashed Icon.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.err.println("Caught: " + e.getMessage());
-			e.printStackTrace();
-			damagedCity = null;
-		}
+		//Normal and damaged city icon
+		ImageIcon originalIcon = new ImageIcon("src/images/Map City Icon.png");
+		Image scaledImage = originalIcon.getImage().getScaledInstance(originalIcon.getIconWidth()/12, originalIcon.getIconHeight()/12, Image.SCALE_SMOOTH);
+		normalCity = new ImageIcon(scaledImage);
+		
+		originalIcon = new ImageIcon("src/images/Map City Smashed Icon.png");
+		scaledImage = originalIcon.getImage().getScaledInstance(originalIcon.getIconWidth()/12, originalIcon.getIconHeight()/12, Image.SCALE_SMOOTH);
+		damagedCity = new ImageIcon(scaledImage);
+		
 		
 		// Conquer button action listener
 		conquer.addActionListener(new ActionListener() {
@@ -109,18 +109,6 @@ public class MapPanel extends JPanel {
 			}
 		});
 		
-
-		
-		//City button
-		ImageIcon originalIcon = new ImageIcon("src/images/Map City Icon.png");
-		Image scaledImage = originalIcon.getImage().getScaledInstance(originalIcon.getIconWidth()/12, originalIcon.getIconHeight()/12, Image.SCALE_SMOOTH);
-		ImageIcon scaledIcon = new ImageIcon(scaledImage);
-//		imageButton = new JButton(scaledIcon);
-//		imageButton.setBorderPainted(false);
-//		imageButton.setContentAreaFilled(false);
-//		imageButton.setFocusPainted(false);
-//		imageButton.setOpaque(false);
-		
 		
 		//iterate through array of cities and set each image to independent button
 		for (City city : cityArray) {
@@ -128,12 +116,12 @@ public class MapPanel extends JPanel {
 			int y = city.getYMapCoord();
 			
 			
-			JButton cityButton = new JButton(scaledIcon);
+			JButton cityButton = new JButton(normalCity);
 			cityButton.setBorderPainted(false);
 			cityButton.setContentAreaFilled(false);
 			cityButton.setFocusPainted(false);
 			cityButton.setOpaque(false);
-			cityButton.setBounds(x, y, scaledIcon.getIconWidth(), scaledIcon.getIconHeight());
+			cityButton.setBounds(x, y, normalCity.getIconWidth(), normalCity.getIconHeight());
 			
 			
 			// ActionListener for individual buttons
@@ -159,6 +147,14 @@ public class MapPanel extends JPanel {
 		}
 	}
 	
+	public void resetImages() {
+		for (int i = 0; i < cityArray.size(); i++) {
+			System.out.println(cityArray.get(i).getDefeated());
+			if (cityArray.get(i).getDefeated()) {
+				cityButtons.get(i).setIcon(damagedCity);
+			}
+		}
+	}
 
 //	private void positionButton() {
 //		int panelWidth = getWidth();

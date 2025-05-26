@@ -44,6 +44,10 @@ public class MapViewer {
 		return frame;
 	}
 	
+	public void reloadMapActions() {
+		mapPanel.resetImages();
+	}
+	
 	private void onConquerButtonPressed() {
 		frame.setVisible(false);
 		setSelectedCity();

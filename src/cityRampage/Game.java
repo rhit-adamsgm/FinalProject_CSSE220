@@ -82,6 +82,7 @@ public class Game {
 			} 
 			raidEnding = false;
 		});
+		mapViewer.reloadMapActions();
 	}
 	
 	

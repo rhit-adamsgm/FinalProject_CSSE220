@@ -8,7 +8,7 @@ public class Atlanta extends City{
 		super(xMapCoord, yMapCoord, backImage);
 		name = "Atlanta";
 		nickname = "Hawks in 5";
-		maxEnemies = 12;
+		maxEnemies = 3;
 		enemyInterval = 3000; //3 seconds
 	}
 
