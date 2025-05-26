@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 public class Emperor {
 	BufferedImage emperor;
-	public int health = 10000000;
+	public int health = 100;
 	
 	public Emperor() {
 		imageinit();

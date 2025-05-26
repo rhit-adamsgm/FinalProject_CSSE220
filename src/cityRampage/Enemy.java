@@ -76,8 +76,8 @@ public abstract class Enemy {
 		g2.drawImage(image, -sizeX/2, -sizeY/2, sizeX, sizeY, null);
 		
 		//DEBUG - hit boxes
-		g2.setColor(Color.RED);
-		g2.drawRect(-sizeX/2, -sizeY/2, sizeX, sizeY);
+		//g2.setColor(Color.RED);
+		//g2.drawRect(-sizeX/2, -sizeY/2, sizeX, sizeY);
 		
 		g2.setTransform(oldTransform); // Restore transform
 	}
