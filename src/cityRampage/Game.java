@@ -58,7 +58,7 @@ public class Game {
 		mapViewer = new MapViewer(model, () -> onMapScreenClose(), cityArray);
 	}
 	
-	
+
 	//Map stuff-------------------------------------------------------------------------------//
 	private void onMapScreenClose() {
 		raidEnding = false;

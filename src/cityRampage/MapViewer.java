@@ -53,7 +53,6 @@ public class MapViewer {
 		}
 	}
 
-
 	public void showFrame() {
 		if (!disposed && frame != null) {
 			SwingUtilities.invokeLater(() -> {
