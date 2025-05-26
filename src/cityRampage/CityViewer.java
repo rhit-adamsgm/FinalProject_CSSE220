@@ -203,7 +203,7 @@ private class InfoPanel extends JPanel {
 			}
 		});
 		
-		 
+	 
 		//start the game play
 		selectedCity.startRaid();
 		
