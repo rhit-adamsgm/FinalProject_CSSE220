@@ -233,6 +233,7 @@ private class InfoPanel extends JPanel {
 		if (onRaidEndCallback != null) {
 			onRaidEndCallback.run();
 		}
+		selectedCity.endRaid();
 	}
 	
 	/**

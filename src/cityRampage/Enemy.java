@@ -64,6 +64,10 @@ public abstract class Enemy {
 		sizeY = height;
 	}
 	
+	public double[] provideHitbox() {
+		return new double[] {ypos-sizeY/4, xpos, sizeY/4, sizeX};
+	}
+	
 	public void draw(Graphics2D g2) {
 		AffineTransform oldTransform = g2.getTransform();  // Save current transform
 		

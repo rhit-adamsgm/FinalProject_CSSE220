@@ -116,7 +116,7 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		}
 	}
 	
-	private void swivelLegFB(Link topLeg, Link botLeg, double topLegD, double botLegD) {
+	private void swivelLegRLFront(double topLegD, double botLegD) {
 		//move the top leg
 		if (checkBotArc(legF1)) {
 			dt1F = dt1F + Math.toRadians(topLegD);
@@ -131,6 +131,22 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		}
 	}
 	
+	private void swivelLegRLBack(double topLegD, double botLegD) {
+		//move the top leg
+		if (checkBotArc(legB1)) {
+			dt1B = dt1B + Math.toRadians(topLegD);
+		} else {
+			dt1B = dt1B - Math.toRadians(topLegD);
+		}
+		//move the bottom leg
+		if (checkBotArc(legB2)) {
+			dt2B = dt2B + Math.toRadians(botLegD);
+		} else {
+			dt2B = dt2B - Math.toRadians(botLegD);
+		}
+	}
+	
+	
 	/**
 	 * returns true if the link is in the front half of the arc, false if in the back half (vertical middle line)
 	 * @param link
@@ -144,18 +160,33 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		}
 	}
 	
-	private void swivelLegUD(Link topLeg, Link botLeg, double topLegD, double botLegD) {
+	private void swivelLegUDFront(double topLegD, double botLegD) {
 		//move the top leg
 		if (checkFrontArc(legF1)) {
-			dt1F = dt1F + Math.toRadians(topLegD);
-		} else {
 			dt1F = dt1F - Math.toRadians(topLegD);
+		} else {
+			dt1F = dt1F + Math.toRadians(topLegD);
 		}
 		//move the bottom leg
 		if (checkFrontArc(legF2)) {
-			dt2F = dt2F + Math.toRadians(botLegD);
-		} else {
 			dt2F = dt2F - Math.toRadians(botLegD);
+		} else {
+			dt2F = dt2F + Math.toRadians(botLegD);
+		}
+	}
+	
+	private void swivelLegUDBack(double topLegD, double botLegD) {
+		//move the top leg
+		if (checkFrontArc(legB1)) {
+			dt1B = dt1B - Math.toRadians(topLegD);
+		} else {
+			dt1B = dt1B + Math.toRadians(topLegD);
+		}
+		//move the bottom leg
+		if (checkFrontArc(legB2)) {
+			dt2B = dt2B - Math.toRadians(botLegD);
+		} else {
+			dt2B = dt2B + Math.toRadians(botLegD);
 		}
 	}
 	
@@ -164,31 +195,34 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 	 * @param e
 	 */
 	public void respond(KeyEvent e) {
-		System.out.println("KeyEvent registered in MechBot");
+		int RL1 = 2;
+		int RL2 = 4;
+		int UD1 = 5;
+		int UD2 = 3;
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_J:	//front leg left
-				swivelLegFB(legF1, legF2, -5, -10);
+				swivelLegRLFront(-RL1, -RL2);
 				break;
 			case KeyEvent.VK_I: //front leg up
-				swivelLegUD(legF1, legF2, 5, 2);
+				swivelLegUDFront(UD1, UD2);
 				break;
 			case KeyEvent.VK_L:	//front leg right
-				swivelLegFB(legF1, legF2, 5, 10);
+				swivelLegRLFront(RL1, RL2);
 				break;
 			case KeyEvent.VK_K:	//front leg down
-				swivelLegUD(legF1, legF2, -5, -2);
+				swivelLegUDFront(-UD1, -UD2);
 				break;
 			case KeyEvent.VK_A:	//back leg left
-				swivelLegFB(legB1, legB2, -5, -10);
+				swivelLegRLBack(-RL1, -RL2);
 				break;
 			case KeyEvent.VK_W: //back leg up
-				swivelLegUD(legB1, legB2, 5, 2);
+				swivelLegUDBack(UD1, UD2);
 				break;
 			case KeyEvent.VK_D:	//back leg right
-				swivelLegFB(legB1, legB2, 5, 10);
+				swivelLegRLBack(RL1, RL2);
 				break;
 			case KeyEvent.VK_S:	//back leg down
-				swivelLegUD(legB1, legB2, -5, -2);
+				swivelLegUDBack(-UD1, -UD2);
 				break;
 		}
 	}
@@ -228,6 +262,7 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 	 * @param groundLevel
 	 */
 	public void handleMovement(int groundLevel) {
+		System.out.println("ground level: " + groundLevel);
 		switch (parseGroundContact(groundLevel)) {
 			case 0: //floating in air
 				frontFreeRotate();
@@ -249,6 +284,7 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 				enforceConstraintsInOrder();
 				break;
 			case 3: //both feet on the ground
+				handleFrontFootContact();
 				handleBackFootContact();
 				clearLastInput();
 				enforceConstraintsInOrder();
@@ -334,6 +370,14 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 		if (by > groundLevel) footB.setY(groundLevel);
 		
 		enforceConstraintsInOrder();
+	}
+	
+	public double[] provideHitboxFF() {
+		return new double[] {footF.getX(), footF.getY(), 15*scaleFactor, 3*scaleFactor};
+	}
+	
+	public double[] provideHitboxBF() {
+		return new double[] {footB.getX(), footB.getY(), 15*scaleFactor, 3*scaleFactor};
 	}
 	
 	//Getters-----------------------------------------------------//

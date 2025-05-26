@@ -68,6 +68,7 @@ public abstract class City {
 	
 	public void endRaid() {
 		timer.stop();
+		enemies.clear();
 	}
 	
 	public void passKeyPress2Mech(KeyEvent e) {
@@ -112,10 +113,36 @@ public abstract class City {
 			spawnEnemyPerson();
 		}
 		//MechBot operation
-		mechBot.handleMovement(groundY);
+		mechBot.handleMovement(groundY-30);
+		
+		//Collision handler
+		dealWithCollisions();
 		
 	}
 	
+	public void dealWithCollisions() {
+		//get hit boxes for mechBot feet
+		double[] ffBox = mechBot.provideHitboxFF();
+		double[] bfBox = mechBot.provideHitboxFF();
+		for (int i=0; i<enemies.size();i++) {
+			double[] eBox = enemies.get(i).provideHitbox();
+			//check collision front foot, handle it, then same for back foot
+			if (isColliding(ffBox[0],ffBox[1],ffBox[2],ffBox[3],eBox[0],eBox[1],eBox[2],eBox[3])) {
+				enemies.remove(i);
+			}
+			if (isColliding(bfBox[0],bfBox[1],bfBox[2],bfBox[3],eBox[0],eBox[1],eBox[2],eBox[3])) {
+				enemies.remove(i);
+			}
+		}
+	}
+	
+	public boolean isColliding(double x1, double y1, double w1, double h1,
+								double x2, double y2, double w2, double h2) {
+		return (x1 < x2 + w2 &&
+		x1 + w1 > x2 &&
+		y1 < y2 + h2 &&
+		y1 + h1 > y2);
+	}
 
 	//specific in the abstract class for now
 	private void spawnEnemyPerson() {
