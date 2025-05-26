@@ -65,7 +65,7 @@ public abstract class Enemy {
 	}
 	
 	public double[] provideHitbox() {
-		return new double[] {ypos-sizeY/4, xpos, sizeY/4, sizeX};
+		return new double[] {xpos-sizeX/2, ypos-sizeY/2, sizeX, sizeY/4};
 	}
 	
 	public void draw(Graphics2D g2) {

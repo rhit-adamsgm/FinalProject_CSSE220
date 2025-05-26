@@ -262,7 +262,6 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 	 * @param groundLevel
 	 */
 	public void handleMovement(int groundLevel) {
-		System.out.println("ground level: " + groundLevel);
 		switch (parseGroundContact(groundLevel)) {
 			case 0: //floating in air
 				frontFreeRotate();
@@ -373,11 +372,11 @@ public MechBot(double homeX, double homeY, double scaleFactor) {
 	}
 	
 	public double[] provideHitboxFF() {
-		return new double[] {footF.getX(), footF.getY(), 15*scaleFactor, 3*scaleFactor};
+		return new double[] {footF.getX(), footF.getY()-3*scaleFactor, 15*scaleFactor, 3*scaleFactor};
 	}
 	
 	public double[] provideHitboxBF() {
-		return new double[] {footB.getX(), footB.getY(), 15*scaleFactor, 3*scaleFactor};
+		return new double[] {footB.getX(), footB.getY()-3*scaleFactor, 15*scaleFactor, 3*scaleFactor};
 	}
 	
 	//Getters-----------------------------------------------------//

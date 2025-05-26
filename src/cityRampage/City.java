@@ -3,6 +3,7 @@ package cityRampage;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -72,7 +73,6 @@ public abstract class City {
 	}
 	
 	public void passKeyPress2Mech(KeyEvent e) {
-		System.out.println("KeyEvent Registered in City");
 		if (cityViewer != null && !cityViewer.isPaused()) {
 		mechBot.respond(e);
 		}
@@ -117,14 +117,13 @@ public abstract class City {
 		
 		//Collision handler
 		dealWithCollisions();
-		
 	}
 	
 	public void dealWithCollisions() {
 		//get hit boxes for mechBot feet
 		double[] ffBox = mechBot.provideHitboxFF();
-		double[] bfBox = mechBot.provideHitboxFF();
-		for (int i=0; i<enemies.size();i++) {
+		double[] bfBox = mechBot.provideHitboxBF();
+		for (int i = enemies.size() - 1; i >= 0; i--) {;
 			double[] eBox = enemies.get(i).provideHitbox();
 			//check collision front foot, handle it, then same for back foot
 			if (isColliding(ffBox[0],ffBox[1],ffBox[2],ffBox[3],eBox[0],eBox[1],eBox[2],eBox[3])) {
@@ -191,6 +190,13 @@ public abstract class City {
 		for (Enemy enemy: enemies) {
 			enemy.draw(g2);
 		}
+		//---------------TEMPDEBUG===========================================================\\
+		//double[] ffBox = mechBot.provideHitboxFF();
+		//double[] eBox = enemies.get(0).provideHitbox();
+		//g2.setColor(Color.CYAN);
+		//System.out.println((int)ffBox[3]);
+		//g2.fillRect((int)ffBox[0], (int)ffBox[1], (int)ffBox[2], (int)ffBox[3]);
+		//g2.fillRect((int)eBox[0], (int)eBox[1], (int)eBox[2], (int)eBox[3]);
 	}
 	private void adjustToFrameSize() {
 		groundY = frameHeight - 5;

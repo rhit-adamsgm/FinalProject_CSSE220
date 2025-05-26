@@ -198,7 +198,6 @@ private class InfoPanel extends JPanel {
 		frame.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println("KeyEvent Registered in CityViewer");
 				selectedCity.passKeyPress2Mech(e);
 			}
 		});
